@@ -12,10 +12,15 @@ struct Address{
     int set;
     char name[MAX_DATA];
     char email[MAX_DATA];
+    //char *name;
+    //char *email;
 };
 
 struct Database{
     struct Address rows[MAX_ROWS];
+    //struct Address **rows;
+    //int row_size;
+    //int data_size;
 };
 
 struct Connection {
@@ -56,7 +61,7 @@ void Database_load(struct Connection *conn){
     }
 }
 
-struct Connection *Database_open(const char *filename, char mode){
+struct Connection *Database_open(const char *filename, char mode, int row_size, int data_size){
     struct Connection *conn = malloc(sizeof(struct Connection));
     if(!conn){
         die(conn, "Memory error");
@@ -66,6 +71,14 @@ struct Connection *Database_open(const char *filename, char mode){
     if (!conn->db){
         die(conn, "Memory error");
     }
+
+    //conn->db->rows = (struct Address **)malloc(sizeof(struct Address) * row_size);
+    //if (!conn->db->rows){
+    //    die(conn, "Memory error");
+    //}
+    //conn->db->data_size = data_size;
+    //conn->db->row_size = row_size;
+
 
     if(mode == 'c'){
         conn->file = fopen(filename, "w");
@@ -114,6 +127,8 @@ void Database_create(struct Connection *conn){
     int i = 0;
     for(i = 0; i < MAX_ROWS; i++){
         struct Address addr = {.id = i, .set = 0};
+        //addr.name = malloc(sizeof(char) * conn->db->data_size);
+        //addr.email = malloc(sizeof(char) * conn->db->data_size);
         conn->db->rows[i] = addr;
     }
 }
@@ -187,7 +202,7 @@ int main(int argc, char *argv[])
 
     char *filename = argv[1];
     char action = argv[2][0];
-    struct Connection *conn = Database_open(filename, action);
+    struct Connection *conn = Database_open(filename, action, MAX_ROWS, MAX_DATA);
     int id = 0;
 
     if(argc > 3){
