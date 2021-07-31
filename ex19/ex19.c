@@ -217,6 +217,4 @@ int main(int argc, char *argv[])
     while (process_input(game));
 
     return 0;
-
-    return 0;
 }
