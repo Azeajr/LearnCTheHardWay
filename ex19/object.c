@@ -35,6 +35,8 @@ int Object_attack(void *self, int damage){
 }
 
 void *Object_new(size_t size, Object proto, char *description){
+    assert(description != NULL);
+    
     //setup default functions in case they aren't set
     if(!proto.init){
         proto.init = Object_init;
@@ -53,6 +55,7 @@ void *Object_new(size_t size, Object proto, char *description){
     }
 
     Object *el = calloc(1, size);
+    assert(el != NULL);
     *el = proto;
 
     el->description = strdup(description);
@@ -61,6 +64,7 @@ void *Object_new(size_t size, Object proto, char *description){
         el->destroy(el);
         return NULL;
     } else {
+        assert(el != NULL);
         return el;
     }
 }
